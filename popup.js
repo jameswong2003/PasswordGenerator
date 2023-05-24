@@ -77,7 +77,12 @@ function generateLetter() {
     return alphabet[index];
 }
 
-function randomizeString(s) {
+/**
+ * Shuffles the string randomly
+ * @param {*} s 
+ * @returns 
+ */
+function shuffleString(s) {
     var str = s.split("");
     var len = s.length;
 
