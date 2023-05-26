@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>PassGen</title>
 </head>
 <body>
-    <h1>Hello Extensions</h1>
+    <h1>Password Generator</h1>
 
     <form id="passwordForm">
         <label for="passwordLength">Password Length: </label>
@@ -21,11 +21,18 @@
 
         <label for="needLowerCase">LowerCase: </label>
         <input id="needLowerCase" type="checkbox">
+        <br>
 
         <label for="needUpperCase">UpperCase: </label>
         <input id="needUpperCase" type="checkbox">
+        <br>
+
+        <input type="submit" value="Submit">
     </form>
 
-    <script src="popup.js"></script> 
+    <div class="passwordContainer">
+        <div class="generatedPassword"></div>
+    </div>
+    <script src="popup.js"></script>
 </body>
 </html>

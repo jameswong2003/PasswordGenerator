@@ -1,16 +1,30 @@
 const MIN_LENGTH = 5;
 const MAX_LENGTH = 20;
 
-function generatePassword() {
-    let passwordLength = 5;
-    let numOfNums = 1;
-    let numSpecialChar = 1;
-    let needLowerCase = true;
-    let needUpperCase = true;
+const passwordForm = document.getElementById("passwordForm");
 
+passwordForm.addEventListener("submit", e => {
+    e.preventDefault();
+
+    let passwordLength = document.getElementById("passwordLength").value;
+    let numOfNums = document.getElementById("numOfNums").value;
+    let numSpecialChar = document.getElementById("numSpecialChar").value;
+    let needLowerCase = document.getElementById("needLowerCase").checked;
+    let needUpperCase = document.getElementById("needUpperCase").checked;
+
+    const generatedChars = generatePassword(passwordLength, numOfNums, numSpecialChar, needLowerCase, needUpperCase);
+    const generatedPassword = shuffleString(generatedChars);
+
+    console.log(generatedPassword);
+})
+
+function generatePassword(passwordLength, numOfNums, numSpecialChar, needLowerCase, needUpperCase) {
     let generatedPassword = "";
-    if (passwordLength < MIN_LENGTH || passwordLength > MAX_LENGTH) {
-        alert("Password Length is invalid");
+
+
+
+    if (passwordLength < MIN_LENGTH || passwordLength > MAX_LENGTH || numOfNums > passwordLength || numSpecialChar > passwordLength) {
+        alert("Invalid Inputs");
         return;
     } else { 
         //valid password proceed to generating it
