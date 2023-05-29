@@ -15,7 +15,7 @@ passwordForm.addEventListener("submit", e => {
     const generatedChars = generatePassword(passwordLength, numOfNums, numSpecialChar, needLowerCase, needUpperCase);
     const generatedPassword = shuffleString(generatedChars);
 
-    console.log(generatedPassword);
+    document.getElementById("generatedPassword").innerHTML = generatedPassword;
 })
 
 function generatePassword(passwordLength, numOfNums, numSpecialChar, needLowerCase, needUpperCase) {
@@ -108,4 +108,16 @@ function shuffleString(s) {
     }
 
     return str.join("");
+}
+
+function savePassword(password) {
+    chrome.storage.local.get(["passwords"], function(result) {
+        var passwords = results.passwords || []; // Retrive existing passwords or initialize a new array
+
+        passwords.push(password);
+
+        chrome.storage.local.set({passwords: passwords}, function() {
+            console.log("Passwored saved to local storage");
+        })
+    })
 }
