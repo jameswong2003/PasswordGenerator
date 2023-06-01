@@ -23,10 +23,12 @@ passwordForm.addEventListener("submit", e => {
 const savedPasswords = chrome.storage.local.get(["passwords"]).then((results) => {
     const savedPasswordDiv = document.querySelector(".savedPasswords");
 
-    for (var i = 0; i < results.passwords.length; i++) {
-        const passwordItem = document.createElement("div");
-        passwordItem.textContent = results.passwords[i];
-        savedPasswordDiv.appendChild(passwordItem);
+    if (results.passwords && Array.isArray(results.passwords)) {
+        for (var i = 0; i < results.passwords.length; i++) {
+            const passwordItem = document.createElement("div");
+            passwordItem.textContent = results.passwords[i];
+            savedPasswordDiv.appendChild(passwordItem);
+        }
     }
 })
 
