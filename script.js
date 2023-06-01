@@ -1,8 +1,8 @@
 const MIN_LENGTH = 5;
 const MAX_LENGTH = 20;
 
+// Event listener to generate new password
 const passwordForm = document.getElementById("passwordForm");
-
 passwordForm.addEventListener("submit", e => {
     e.preventDefault();
 
@@ -16,12 +16,22 @@ passwordForm.addEventListener("submit", e => {
     const generatedPassword = shuffleString(generatedChars);
 
     document.getElementById("generatedPassword").innerHTML = generatedPassword;
+    savePassword(generatedPassword);
+})
+
+// Automatically import passwords from saved console
+const savedPasswords = chrome.storage.local.get(["passwords"]).then((results) => {
+    const savedPasswordDiv = document.querySelector(".savedPasswords");
+
+    for (var i = 0; i < results.passwords.length; i++) {
+        const passwordItem = document.createElement("div");
+        passwordItem.textContent = results.passwords[i];
+        savedPasswordDiv.appendChild(passwordItem);
+    }
 })
 
 function generatePassword(passwordLength, numOfNums, numSpecialChar, needLowerCase, needUpperCase) {
     let generatedPassword = "";
-
-
 
     if (passwordLength < MIN_LENGTH || passwordLength > MAX_LENGTH || numOfNums > passwordLength || numSpecialChar > passwordLength) {
         alert("Invalid Inputs");
@@ -111,7 +121,7 @@ function shuffleString(s) {
 }
 
 function savePassword(password) {
-    chrome.storage.local.get(["passwords"], function(result) {
+    chrome.storage.local.get(["passwords"], function(results) {
         var passwords = results.passwords || []; // Retrive existing passwords or initialize a new array
 
         passwords.push(password);
