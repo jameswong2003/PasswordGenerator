@@ -1,8 +1,11 @@
-import { generatePassword, shuffleString, savePassword } from "./functions.js";
+import { generatePassword, shuffleString, savePassword, updateDisplay } from "./functions.js";
 
 // Event listener to generate new password
 const passwordForm = document.getElementById("passwordForm");
 let generatedPassword = "";
+
+// Display the password List
+updateDisplay();
 
 passwordForm.addEventListener("submit", e => {
     e.preventDefault();

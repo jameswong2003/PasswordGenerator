@@ -106,7 +106,6 @@ export function shuffleString(s) {
  */
 export function savePassword() {
     const password = document.getElementById("generatedPassword").innerHTML;
-    console.log("hello world");
   
     chrome.storage.local.get(["passwords"], function (results) {
       var passwords = results.passwords || []; // Retrieve existing passwords or initialize a new array
@@ -139,8 +138,4 @@ export function updateDisplay() {
         }
       }
     });
-}
-
-export {
-
 }
