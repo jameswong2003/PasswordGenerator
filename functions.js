@@ -106,12 +106,12 @@ export function shuffleString(s) {
  */
 export function savePassword() {
     const password = document.getElementById("generatedPassword").innerHTML;
-  
+    const url = window.location.href;
+
     chrome.storage.local.get(["passwords"], function (results) {
       var passwords = results.passwords || []; // Retrieve existing passwords or initialize a new array
   
-      passwords.push(password);
-  
+      passwords.push([url, password]);
       chrome.storage.local.set({ passwords: passwords }, function () {
         console.log("Password saved to local storage");
       });
@@ -126,16 +126,16 @@ export function savePassword() {
 export function updateDisplay() {
     // Automatically import passwords from saved console
     chrome.storage.local.get(["passwords"], function (results) {
-      const savedPasswordDiv = document.querySelector(".savedPasswords");
+        const savedPasswordDiv = document.querySelector(".savedPasswords");
   
-      if (results.passwords && Array.isArray(results.passwords)) {
-        savedPasswordDiv.innerHTML = ""; // Clear existing passwords
-  
-        for (var i = 0; i < results.passwords.length; i++) {
-          const passwordItem = document.createElement("div");
-          passwordItem.textContent = results.passwords[i];
-          savedPasswordDiv.appendChild(passwordItem);
+        if (results.passwords && Array.isArray(results.passwords)) {
+            savedPasswordDiv.innerHTML = ""; // Clear existing passwords
+            
+            for (var i = 0; i < results.passwords.length; i++) {
+              const passwordItem = document.createElement("div");
+              passwordItem.textContent = results.passwords[i];
+              savedPasswordDiv.appendChild(passwordItem);
+            }
         }
-      }
     });
 }
