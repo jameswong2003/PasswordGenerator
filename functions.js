@@ -106,7 +106,11 @@ export function shuffleString(s) {
  */
 export function savePassword() {
     const password = document.getElementById("generatedPassword").innerHTML;
-    const url = window.location.href;
+    const url = ""
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+        url = tabs[0].url;
+    })
+
 
     chrome.storage.local.get(["passwords"], function (results) {
       var passwords = results.passwords || []; // Retrieve existing passwords or initialize a new array
@@ -116,7 +120,7 @@ export function savePassword() {
         console.log("Password saved to local storage");
       });
     });
-  
+
     updateDisplay();
   }
 
