@@ -22,7 +22,6 @@ passwordForm.addEventListener("submit", e => {
     document.getElementById("generatedPassword").innerHTML = generatedPassword;
 })
 
-document.addEventListener("DOMContentLoaded", function () {
-    var saveButton = document.getElementById("savePassword");
-    saveButton.addEventListener("click", savePassword);
+document.getElementById("savePassword").addEventListener("click", function() {
+    savePassword();
 })

@@ -11,7 +11,7 @@ const MAX_LENGTH = 20;
  * @param {*} needUpperCase 
  * @returns 
  */
-export function generatePassword(passwordLength, numOfNums, numSpecialChar, needLowerCase, needUpperCase) {
+function generatePassword(passwordLength, numOfNums, numSpecialChar, needLowerCase, needUpperCase) {
     let generatedPassword = "";
 
     if (passwordLength < MIN_LENGTH || passwordLength > MAX_LENGTH || numOfNums > passwordLength || numSpecialChar > passwordLength) {
@@ -87,7 +87,7 @@ function generateLetter() {
  * @param {*} s 
  * @returns 
  */
-export function shuffleString(s) {
+function shuffleString(s) {
     var str = s.split("");
     var len = s.length;
 
@@ -104,42 +104,38 @@ export function shuffleString(s) {
 /**
  * Saves passwords to chrome local storage
  */
-export function savePassword() {
+function savePassword() {
     const password = document.getElementById("generatedPassword").innerHTML;
-    const url = ""
-    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
-        url = tabs[0].url;
-    })
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
+        const url = tabs[0].url;
 
-
-    chrome.storage.local.get(["passwords"], function (results) {
-      var passwords = results.passwords || []; // Retrieve existing passwords or initialize a new array
-  
-      passwords.push([url, password]);
-      chrome.storage.local.set({ passwords: passwords }, function () {
-        console.log("Password saved to local storage");
-      });
+        chrome.storage.local.get(["passwords"], function (results) {
+            var passwords = results.passwords || []; // Retrieve existing passwords or initialize a new array
+            passwords.push([url, password]);
+            chrome.storage.local.set({ passwords: passwords }, function () {
+                console.log("Password saved to local storage");
+                chrome.storage.local.get(["passwords"], function (results) {
+                    console.log("Stored passwords:", results.passwords);
+                });
+            });
+        });
     });
+}
 
-    updateDisplay();
-  }
 
 /**
  * Updates the password display
  */
-export function updateDisplay() {
-    // Automatically import passwords from saved console
-    chrome.storage.local.get(["passwords"], function (results) {
-        const savedPasswordDiv = document.querySelector(".savedPasswords");
-  
-        if (results.passwords && Array.isArray(results.passwords)) {
-            savedPasswordDiv.innerHTML = ""; // Clear existing passwords
-            
-            for (var i = 0; i < results.passwords.length; i++) {
-              const passwordItem = document.createElement("div");
-              passwordItem.textContent = results.passwords[i];
-              savedPasswordDiv.appendChild(passwordItem);
-            }
-        }
-    });
+function updateDisplay() {
+
 }
+
+/**
+ * Clears the database
+ */
+function clear_database() {
+    chrome.storage.local.clear();
+}
+
+
+export {generatePassword, shuffleString, savePassword, updateDisplay, clear_database}
