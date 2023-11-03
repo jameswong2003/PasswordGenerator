@@ -8,6 +8,7 @@
         "default_icon": "settings.png"
     },
     "permissions": [
-        "storage"
+        "storage",
+        "activeTab"
     ]
 }

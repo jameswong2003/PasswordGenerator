@@ -13,18 +13,26 @@
         <label for="passwordLength">Password Length: </label>
         <input  id="passwordLength" type="number">
 
+        <br>
+
         <label for="numOfNums"># of numbers: </label>
         <input id="numOfNums" type="number">
+        
+        <br>
 
         <label for="numSpecialChar"># of Special Characters: </label>
         <input id="numSpecialChar" type="number">
 
+        <br>
+
         <label for="needLowerCase">LowerCase: </label>
         <input id="needLowerCase" type="checkbox">
+
         <br>
 
         <label for="needUpperCase">UpperCase: </label>
         <input id="needUpperCase" type="checkbox">
+
         <br>
 
         <input type="submit" value="Submit">
@@ -34,9 +42,12 @@
         <div id="generatedPassword"></div>
         <button id="savePassword">Save Password</button>
         
-        <div id="savedPasswords">
-            <!-- Append saved passwords from local storage -->
-        </div>
+        <table id="savedPasswords">
+            <tr>
+                <th>Website</th>
+                <th>Password</th>
+            </tr>
+        </table>
         
     </div>
 

@@ -107,14 +107,19 @@ function shuffleString(s) {
 function savePassword() {
     const newPassword = document.getElementById("generatedPassword").innerHTML;
 
-    chrome.storage.local.get(["passwords"], function (results) {
-        var existingPasswords = results.passwords || []; // Retrieve existing passwords or initialize a new array
-        existingPasswords.push(newPassword);
-        chrome.storage.local.set({ passwords: existingPasswords }, function () {
-            console.log("Updated passwords", existingPasswords);
-        });
+    chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+        let url = tabs[0].url;
+        // use `url` here inside the callback because it's asynchronous!
+        chrome.storage.local.get(["passwords"], function (results) {
+            let existingPasswords = results.passwords || []; // Retrieve existing passwords or initialize a new array
+            existingPasswords.push([url, newPassword]);
 
-        updateDisplay();
+            chrome.storage.local.set({ passwords: existingPasswords }, function () {
+                console.log("Updated passwords", existingPasswords);
+            });
+    
+            updateDisplay();
+        });
     });
 }
 
@@ -131,13 +136,16 @@ function updateDisplay() {
     // Retrieve the passwords from chrome.storage.local using a callback
     chrome.storage.local.get(["passwords"], function (results) {
         const passwords = results.passwords || [];
-
         // Loop through the passwords and add them to the display
         for (let i = 0; i < passwords.length; i++) {
-            const password = passwords[i];
-            const passwordElement = document.createElement("p");
-            passwordElement.textContent = password;
-            savedPasswordContainer.appendChild(passwordElement);
+            const url = passwords[i][0];
+            const password = passwords[i][1];
+
+            const row = savedPasswordContainer.insertRow(-1);
+            const cell1 = row.insertCell(0);
+            const cell2 = row.insertCell(1);
+            cell1.innerHTML = url;
+            cell2.innerHTML = password;
         }
     });
 }
