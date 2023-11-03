@@ -105,20 +105,16 @@ function shuffleString(s) {
  * Saves passwords to chrome local storage
  */
 function savePassword() {
-    const password = document.getElementById("generatedPassword").innerHTML;
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
-        const url = tabs[0].url;
+    const newPassword = document.getElementById("generatedPassword").innerHTML;
 
-        chrome.storage.local.get(["passwords"], function (results) {
-            var passwords = results.passwords || []; // Retrieve existing passwords or initialize a new array
-            passwords.push([url, password]);
-            chrome.storage.local.set({ passwords: passwords }, function () {
-                console.log("Password saved to local storage");
-                chrome.storage.local.get(["passwords"], function (results) {
-                    console.log("Stored passwords:", results.passwords);
-                });
-            });
+    chrome.storage.local.get(["passwords"], function (results) {
+        var existingPasswords = results.passwords || []; // Retrieve existing passwords or initialize a new array
+        existingPasswords.push(newPassword);
+        chrome.storage.local.set({ passwords: existingPasswords }, function () {
+            console.log("Updated passwords", existingPasswords);
         });
+
+        updateDisplay();
     });
 }
 
@@ -127,8 +123,26 @@ function savePassword() {
  * Updates the password display
  */
 function updateDisplay() {
+    const savedPasswordContainer = document.getElementById("savedPasswords");
 
+    // Clear the saved passwords
+    savedPasswordContainer.innerHTML = "";
+
+    // Retrieve the passwords from chrome.storage.local using a callback
+    chrome.storage.local.get(["passwords"], function (results) {
+        const passwords = results.passwords || [];
+
+        // Loop through the passwords and add them to the display
+        for (let i = 0; i < passwords.length; i++) {
+            const password = passwords[i];
+            const passwordElement = document.createElement("p");
+            passwordElement.textContent = password;
+            savedPasswordContainer.appendChild(passwordElement);
+        }
+    });
 }
+
+
 
 /**
  * Clears the database
