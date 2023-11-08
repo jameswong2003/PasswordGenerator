@@ -14,13 +14,15 @@ const MAX_LENGTH = 20;
 function generatePassword(passwordLength, numOfNums, numSpecialChar, needLowerCase, needUpperCase) {
     let generatedPassword = "";
 
-    if (passwordLength < MIN_LENGTH || passwordLength > MAX_LENGTH || numOfNums > passwordLength || numSpecialChar > passwordLength) {
+    if (passwordLength < MIN_LENGTH || passwordLength > MAX_LENGTH || (numOfNums + numSpecialChar) > passwordLength) {
         alert("Invalid Inputs");
+        console.log(passwordLength, numOfNums, numSpecialChar);
         return;
     } else { 
         //valid password proceed to generating it
         for (var i = 0; i < passwordLength; i++) {
             var charToAdd = "";
+            // Add numbers first
             if (numOfNums > 0) {
                 charToAdd = generateNum();
                 numOfNums -= 1;
@@ -144,20 +146,39 @@ function updateDisplay() {
             const row = savedPasswordContainer.insertRow(-1);
             const cell1 = row.insertCell(0);
             const cell2 = row.insertCell(1);
+            const cell3 = row.insertCell(2);
             cell1.innerHTML = url;
             cell2.innerHTML = password;
+
+
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.onclick = function() {
+                deleteRow(url, row);
+            };
+
+            cell3.appendChild(deleteButton)
         }
     });
 }
 
+function deleteRow(url, row) {
+    chrome.storage.local.get(["passwords"], function (results) {
+      const passwords = results.passwords || [];
+  
+      // Find the index of the password to delete
+      const indexToDelete = passwords.findIndex((entry) => entry[0] === url);
+  
+      if (indexToDelete !== -1) {
+        passwords.splice(indexToDelete, 1);
+  
+        // Save the updated passwords back to chrome.storage.local
+        chrome.storage.local.set({ passwords: passwords }, function () {
+          // Remove the row from the table
+          row.remove();
+        });
+      }
+    });
+  }
 
-
-/**
- * Clears the database
- */
-function clear_database() {
-    chrome.storage.local.clear();
-}
-
-
-export {generatePassword, shuffleString, savePassword, updateDisplay, clear_database}
+export {generatePassword, shuffleString, savePassword, updateDisplay}
