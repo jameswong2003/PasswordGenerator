@@ -1,7 +1,5 @@
 const MIN_LENGTH = 5;
 const MAX_LENGTH = 20;
-// checking
-
 
 /**
  * Generates a string of randomized characters for passwords
